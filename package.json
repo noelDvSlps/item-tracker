@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "seed": "node reseed-db.mjs"
+    "seed": "node reseed-db.mjs",
+    "server": "npx json-server --watch db.json"
   },
   "dependencies": {
     "hot": "^0.0.7",
