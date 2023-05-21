@@ -33,7 +33,12 @@ export const RootLayout = () => {
     }
   };
   useEffect(() => {
-    !user && navigate("../");
+    if (!user) {
+      navigate("../");
+      localStorage.clear();
+    } else {
+      userValidationErrHandler();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
