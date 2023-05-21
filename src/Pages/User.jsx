@@ -6,16 +6,21 @@ import { getItems } from "../api/item/getItems";
 import { useAuth } from "../providers/authProvider";
 
 export const User = () => {
-  const { user } = useAuth();
+  const { validateUser, user } = useAuth();
   const navigate = useNavigate();
+  // const maybeUser = JSON.parse(localStorage.getItem("user"));
+  // maybeUser && validateUser(maybeUser.id);
+  console.log("user", user);
+
   useEffect(() => {
+    // userValidated === false && navigate("../");
     !user && navigate("../");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const allItemsLoaded = useLoaderData();
 
-  localStorage.setItem("activeWindow", "user");
+  user && localStorage.setItem("activeWindow", "user");
 
   return (
     <section

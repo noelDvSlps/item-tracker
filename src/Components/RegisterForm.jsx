@@ -8,8 +8,6 @@ import {
 } from "../validations/validations";
 import { useNavigate } from "react-router-dom";
 
-
-
 // eslint-disable-next-line react/prop-types
 export const RegisterForm = ({ allUsers }) => {
   const [fullNameInput, setFullNameInput] = useState("");
@@ -22,7 +20,7 @@ export const RegisterForm = ({ allUsers }) => {
     confirmPasswordInputError: undefined,
     fullNameError: undefined,
   });
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
 
   const handleBlur = ({ target: { name, value } }, callBackFunction) => {
@@ -88,6 +86,8 @@ export const RegisterForm = ({ allUsers }) => {
             register(newUser)
               .then(() => {
                 toast.success("registered");
+                login({ username: usernameInput, password: passwordInput });
+                navigate(0);
               })
               .catch(() => {
                 toast.error("registration failed");

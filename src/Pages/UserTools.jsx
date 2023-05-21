@@ -8,7 +8,10 @@ import { useAuth } from "../providers/authProvider";
 export const UserTools = () => {
   const navigate = useNavigate();
   const userToolsLoaded = useLoaderData(); //{items: ..., history: ,,,}
-  const { user } = useAuth();
+  const { user, validateUser } = useAuth();
+  const maybeUser = JSON.parse(localStorage.getItem("user"));
+  // const userValidated = maybeUser ? validateUser(maybeUser.id) : false;
+
   const userHistory = user
     ? userToolsLoaded.history.filter(
         (transaction) => transaction.userId === user.id

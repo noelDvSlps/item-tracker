@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { getUserByUsername } from "../api/user/getUserFromServer";
 import { toast } from "react-hot-toast";
 import { registerFetch } from "../api/user/register";
+import { getUsers } from "../api/user/getUsers";
 
 const AuthContext = createContext({});
 
@@ -34,6 +35,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const maybeUser = localStorage.getItem("user");
+
+  const validateUser = async (id) => {
+    const allUsers = await getUsers();
+    const user = await allUsers.find((user) => user.id === id);
+
+    if (user === undefined) {
+      setUser(null);
+      return false;
+    } else {
+      setUser(user);
+      return true;
+    }
+  };
+
   useEffect(() => {
     if (maybeUser) {
       setUser(JSON.parse(maybeUser));
@@ -48,6 +63,7 @@ export const AuthProvider = ({ children }) => {
         loginSuccess,
         register,
         logout,
+        validateUser,
       }}
     >
       {children}

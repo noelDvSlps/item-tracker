@@ -1,17 +1,41 @@
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
+import { useEffect } from "react";
+import { toast } from "react-hot-toast";
 
 export const RootLayout = () => {
+  const data = useLoaderData();
+  console.log("root", data);
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, validateUser, user } = useAuth();
   const handleLogOut = () => {
     localStorage.clear();
     logout();
     navigate(0); //refresh
   };
 
-  const maybeUser = JSON.parse(localStorage.getItem("user"));
-  // maybeUser && navigate(0)
+  const userValidationErrHandler = async () => {
+    // if localstorage "user.id" was changed or the whole object is deleted or user.id = noMatch
+    const maybeUser = JSON.parse(localStorage.getItem("user"));
+    const isUserValid = maybeUser ? await validateUser(maybeUser.id) : false;
+    if (isUserValid === false) {
+      toast.error("You are logged out. You need to log in again");
+      setTimeout(() => {
+        localStorage.clear();
+        navigate(0);
+      }, 2000);
+    }
+  };
+  useEffect(() => {
+    !user && navigate("../");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="root-layout">
@@ -23,16 +47,22 @@ export const RootLayout = () => {
           fontSize: "1",
         }}
       >
-        {maybeUser && `Hi ${maybeUser.fullName}!`}
+        {user && `Hi ${user.fullName}!`}
       </span>
       <header style={{ padding: "15px 50px" }}>
         <nav>
           <h1 style={{ color: "orange" }}>Item Tracker</h1>
-          {maybeUser && (
+          {user && (
             <>
-              <NavLink to={"../User"}>HOME</NavLink>
-              <NavLink to={"../UserHistory"}>History</NavLink>
-              <NavLink to={"../UserTools"}>My tools</NavLink>
+              <NavLink to={"../User"} onClick={userValidationErrHandler}>
+                HOME
+              </NavLink>
+              <NavLink to={"../UserHistory"} onClick={userValidationErrHandler}>
+                History
+              </NavLink>
+              <NavLink to={"../UserTools"} onClick={userValidationErrHandler}>
+                My tools
+              </NavLink>
               <Link to={""} onClick={handleLogOut}>
                 Log Out
               </Link>
@@ -41,7 +71,7 @@ export const RootLayout = () => {
         </nav>
       </header>
       <main>
-        <Outlet />
+        <Outlet context={userValidationErrHandler} />
       </main>
     </div>
   );

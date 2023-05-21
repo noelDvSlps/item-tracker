@@ -20,7 +20,7 @@ import { ErrorElement } from "./Pages/ErrorElement";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
+    <Route path="/" element={<RootLayout />} loader={allUsersLoader}>
       <Route path="/" element={<Main />} loader={allUsersLoader} />
 
       <Route

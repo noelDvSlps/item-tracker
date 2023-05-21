@@ -5,16 +5,17 @@ import { getItemFromServer } from "../api/item/getItemFromServer";
 import { updateHistory } from "../api/history/updateHistory";
 import { getItemsHistory } from "../api/history/getItemsHistory";
 import _ from "lodash";
+import { useOutletContext } from "react-router-dom";
 
 export const ItemCard = ({ item: currentItem, allUsers }) => {
   const [itemHistory, setItemHistory] = useState([]);
-  const { user } = useAuth();
-  // const user = localStorage.getItem("user")
+  const { user, validateUser } = useAuth();
   const [item, setItem] = useState(currentItem);
   const { name, description, status, userId } = item;
+  const userValidationErrHandler = useOutletContext();
 
-  const getHistory = () => {
-    getItemsHistory().then((history) => {
+  const getHistory = async () => {
+    await getItemsHistory().then((history) => {
       const sortedHistory = _.orderBy(history, ["timeStamp"], ["desc"]);
       const filteredHistoryByItem = sortedHistory
         ? _.filter(sortedHistory, { itemId: item.id })
@@ -28,30 +29,38 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleTransaction = (e, { isReturningItem }) => {
+  const handleTransaction = async (e, { isReturningItem }) => {
     e.target.disabled = true;
-    e.target.innerHTML =
-      e.target.innerHTML === isReturningItem ? "Borrow" : "Return";
-    const transactionDate = new Date();
-    // const borrowerId = isReturningItem ? null : user.id;
-    const itemStatus = isReturningItem ? "available" : "unavailable";
 
-    updateItem(item.id, user.id, itemStatus).then((res) => {
-      if (res.ok) {
-        updateHistory({
+    try {
+      const validUser = await validateUser(
+        JSON.parse(localStorage.getItem("user")).id
+      );
+
+      if (validUser) {
+        e.target.innerHTML =
+          e.target.innerHTML === isReturningItem ? "Borrow" : "Return";
+        const transactionDate = new Date().toLocaleString();
+        const itemStatus = isReturningItem ? "available" : "unavailable";
+
+        await updateItem(item.id, user.id, itemStatus);
+        await updateHistory({
           userId: user.id,
           transaction: isReturningItem ? "Return" : "Borrow",
           itemId: item.id,
-          timeStamp: transactionDate.toLocaleString(),
-        }).then(() => {
-          getItemFromServer({ itemId: item.id }).then((item) => {
-            setItem(item);
-            getHistory();
-          });
-          e.target.disabled = false;
+          timeStamp: transactionDate,
         });
+        const itemFromServer = await getItemFromServer({ itemId: item.id });
+        setItem(itemFromServer);
+        await getHistory();
+      } else {
+        userValidationErrHandler();
       }
-    });
+    } catch {
+      userValidationErrHandler();
+    }
+
+    e.target.disabled = false;
   };
 
   const getUserName = (userId) => {
