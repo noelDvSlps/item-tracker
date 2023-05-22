@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { ItemsList } from "../Components/ItemsList";
 import { useEffect } from "react";
@@ -6,11 +7,8 @@ import { getItems } from "../api/item/getItems";
 import { useAuth } from "../providers/authProvider";
 
 export const User = () => {
-  const { validateUser, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
-  // const maybeUser = JSON.parse(localStorage.getItem("user"));
-  // maybeUser && validateUser(maybeUser.id);
-  console.log("user", user);
 
   useEffect(() => {
     // userValidated === false && navigate("../");
@@ -27,9 +25,9 @@ export const User = () => {
       style={{
         margin: 0,
         backgroundImage: `url(${Background})`,
-        backgroundPosition: "top",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        // backgroundPosition: "top",
+        // backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
         minHeight: "85vh",
       }}
     >

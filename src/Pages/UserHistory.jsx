@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useEffect } from "react";
 import { getItemsHistory } from "../api/history/getItemsHistory";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -28,9 +29,9 @@ export const UserHistory = () => {
       style={{
         margin: 0,
         backgroundImage: `url(${Background})`,
-        backgroundPosition: "top",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        // backgroundPosition: "top",
+        // backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
         minHeight: "100vh",
         padding: "20px",
       }}
@@ -44,6 +45,7 @@ export const UserHistory = () => {
               <th>Transaction</th>
               <th>ID</th>
               <th>Description</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
@@ -59,7 +61,20 @@ export const UserHistory = () => {
                         .description
                     }
                   </td>
-                  {/* <td>{history.description}</td> */}
+                  <td>
+                    <img
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                        borderRadius: "10px",
+                      }}
+                      src={
+                        data.allItems.find((item) => item.id === history.itemId)
+                          .image
+                      }
+                      alt=""
+                    />
+                  </td>
                 </tr>
               );
             })}

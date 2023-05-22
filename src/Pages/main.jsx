@@ -1,9 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 //Components
 import { PageBackground } from "../Components/PageBackground";
 import { LoginForm } from "../Components/LoginForm";
 import { RegisterForm } from "../Components/RegisterForm";
 import { useEffect, useState } from "react";
-import Background from "../assets/images/tools.png";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { getUsers } from "../api/user/getUsers";
 import { useAuth } from "../providers/authProvider";
@@ -16,7 +16,6 @@ export const Main = () => {
   const [forms, setForms] = useState(["Login", "Register"]);
   const maybeUser = JSON.parse(localStorage.getItem("user"));
   maybeUser && validateUser(maybeUser.id);
-  console.log("main", user);
 
   const swapForms = () => {
     setForms([forms[1], forms[0]]);
@@ -28,21 +27,7 @@ export const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <section
-      style={{
-        height: "100vh",
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gridAutoFlow: "column",
-        padding: "50px",
-        backgroundImage: `url(${Background})`,
-        backgroundPosition: "top",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        alignItems: "center",
-        gap: "25px",
-      }}
-    >
+    <section className="pages">
       <div>
         <PageBackground />
       </div>

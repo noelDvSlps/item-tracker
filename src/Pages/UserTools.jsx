@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useEffect } from "react";
 import { getItems } from "../api/item/getItems";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -8,8 +9,7 @@ import { useAuth } from "../providers/authProvider";
 export const UserTools = () => {
   const navigate = useNavigate();
   const userToolsLoaded = useLoaderData(); //{items: ..., history: ,,,}
-  const { user, validateUser } = useAuth();
-  const maybeUser = JSON.parse(localStorage.getItem("user"));
+  const { user } = useAuth();
   // const userValidated = maybeUser ? validateUser(maybeUser.id) : false;
 
   const userHistory = user
@@ -39,9 +39,9 @@ export const UserTools = () => {
       style={{
         margin: 0,
         backgroundImage: `url(${Background})`,
-        backgroundPosition: "top",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        // backgroundPosition: "top",
+        // backgroundSize: "cover",
+        // backgroundRepeat: "no-repeat",
         minHeight: "100vh",
         padding: "20px",
       }}
@@ -55,6 +55,7 @@ export const UserTools = () => {
               <th>ID</th>
               <th>Name</th>
               <th>Description</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
@@ -71,6 +72,17 @@ export const UserTools = () => {
                   <td>{userItem.id}</td>
                   <td>{userItem.name}</td>
                   <td>{userItem.description}</td>
+                  <td>
+                    <img
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                        borderRadius: "10px",
+                      }}
+                      src={userItem.image}
+                      alt=""
+                    />
+                  </td>
                 </tr>
               );
             })}

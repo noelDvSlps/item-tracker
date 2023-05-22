@@ -5,13 +5,15 @@ import { getItemFromServer } from "../api/item/getItemFromServer";
 import { updateHistory } from "../api/history/updateHistory";
 import { getItemsHistory } from "../api/history/getItemsHistory";
 import _ from "lodash";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const ItemCard = ({ item: currentItem, allUsers }) => {
+  const navigate = useNavigate();
   const [itemHistory, setItemHistory] = useState([]);
   const { user, validateUser } = useAuth();
   const [item, setItem] = useState(currentItem);
-  const { name, description, status, userId } = item;
+  const { name, description, status, userId, image } = item;
   const userValidationErrHandler = useOutletContext();
 
   const getHistory = async () => {
@@ -31,7 +33,6 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
 
   const handleTransaction = async (e, { isReturningItem }) => {
     e.target.disabled = true;
-
     try {
       const validUser = await validateUser(
         JSON.parse(localStorage.getItem("user")).id
@@ -42,25 +43,30 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
           e.target.innerHTML === isReturningItem ? "Borrow" : "Return";
         const transactionDate = new Date().toLocaleString();
         const itemStatus = isReturningItem ? "available" : "unavailable";
-
-        await updateItem(item.id, user.id, itemStatus);
-        await updateHistory({
-          userId: user.id,
-          transaction: isReturningItem ? "Return" : "Borrow",
-          itemId: item.id,
-          timeStamp: transactionDate,
-        });
-        const itemFromServer = await getItemFromServer({ itemId: item.id });
-        setItem(itemFromServer);
-        await getHistory();
+        try {
+          await updateItem(item.id, user.id, itemStatus);
+          await updateHistory({
+            userId: user.id,
+            transaction: isReturningItem ? "Return" : "Borrow",
+            itemId: item.id,
+            timeStamp: transactionDate,
+          });
+          const itemFromServer = await getItemFromServer({ itemId: item.id });
+          setItem(itemFromServer);
+          await getHistory();
+          e.target.disabled = false;
+        } catch {
+          toast.error("Server Connection Failed");
+          navigate(0);
+        }
       } else {
+        e.target.disabled = false;
         userValidationErrHandler();
       }
     } catch {
+      e.target.disabled = false;
       userValidationErrHandler();
     }
-
-    e.target.disabled = false;
   };
 
   const getUserName = (userId) => {
@@ -73,6 +79,30 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
     <div className="item-card">
       <div style={{ width: "100%" }}>
         <div>ID: {item.id}</div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            height: "20vh",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: "50%",
+              border: "1px solid",
+              borderRadius: "15px",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              style={{ height: "100%", width: "100%", objectFit: "fill" }}
+              src={image}
+              alt=""
+            />
+          </div>
+        </div>
         <div>Item Name:{name}</div>
         <div>Description: {description}</div>
         <div>Status: {status}</div>

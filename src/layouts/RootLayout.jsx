@@ -1,19 +1,12 @@
-import {
-  Link,
-  NavLink,
-  Outlet,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 export const RootLayout = () => {
-  const data = useLoaderData();
-  console.log("root", data);
   const navigate = useNavigate();
   const { logout, validateUser, user } = useAuth();
+
   const handleLogOut = () => {
     localStorage.clear();
     logout();
@@ -33,12 +26,14 @@ export const RootLayout = () => {
     }
   };
   useEffect(() => {
-    if (!user) {
-      navigate("../");
-      localStorage.clear();
-    } else {
-      userValidationErrHandler();
-    }
+    // const maybeUser = JSON.parse(localStorage.getItem("user"));
+    // maybeUser && validateUser(maybeUser.id);
+    // if (!user) {
+    //   navigate("../");
+    //   localStorage.clear();
+    // } else {
+    //   userValidationErrHandler();
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

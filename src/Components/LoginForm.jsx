@@ -7,7 +7,6 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-
   const { login, loginSuccess } = useAuth();
 
   useEffect(() => {
