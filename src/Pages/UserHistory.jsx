@@ -68,7 +68,9 @@ export const UserHistory = () => {
                         width: "100px",
                         borderRadius: "10px",
                       }}
-                      src={item !== undefined ? item.image : null}
+                      src={
+                        item !== undefined ? item.image : "items/deleted.png"
+                      }
                       alt=""
                     />
                   </td>

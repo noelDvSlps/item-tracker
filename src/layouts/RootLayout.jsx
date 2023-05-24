@@ -64,9 +64,6 @@ export const RootLayout = () => {
               <NavLink to={"../UserTools"} onClick={userValidationErrHandler}>
                 My tools
               </NavLink>
-              <NavLink to={"../UserTools2"} onClick={userValidationErrHandler}>
-                My tools
-              </NavLink>
               <Link to={""} onClick={handleLogOut}>
                 Log Out
               </Link>

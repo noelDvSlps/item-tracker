@@ -7,7 +7,6 @@ export const deleteItemFromServer = (userId) => {
       "Content-Type": "application/json",
     },
     method: "DELETE",
-    redirect: "follow",
   };
   return fetch(urlWithId, requestOptions).then((response) => {
     if (!response.ok) {
