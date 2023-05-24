@@ -47,7 +47,8 @@ export const RootLayout = () => {
           fontSize: "1",
         }}
       >
-        {user && `Hi ${user.fullName}!`}
+        {user &&
+          `Hi ${user.userType === "admin" ? "Admin" : ""} ${user.fullName}!`}
       </span>
       <header style={{ padding: "15px 50px" }}>
         <nav>
@@ -61,6 +62,9 @@ export const RootLayout = () => {
                 History
               </NavLink>
               <NavLink to={"../UserTools"} onClick={userValidationErrHandler}>
+                My tools
+              </NavLink>
+              <NavLink to={"../UserTools2"} onClick={userValidationErrHandler}>
                 My tools
               </NavLink>
               <Link to={""} onClick={handleLogOut}>

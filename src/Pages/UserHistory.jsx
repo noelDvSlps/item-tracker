@@ -50,16 +50,16 @@ export const UserHistory = () => {
           </thead>
           <tbody>
             {sortByDateHistory.map((history) => {
+              const item = data.allItems.find(
+                (item) => item.id === history.itemId
+              );
               return (
                 <tr key={history.id}>
                   <td style={{ width: "20%" }}>{history.timeStamp}</td>
                   <td>{history.transaction}</td>
                   <td>{history.itemId}</td>
                   <td>
-                    {
-                      data.allItems.find((item) => item.id === history.itemId)
-                        .description
-                    }
+                    {item !== undefined ? item.description : "item was deleted"}
                   </td>
                   <td>
                     <img
@@ -68,10 +68,7 @@ export const UserHistory = () => {
                         width: "100px",
                         borderRadius: "10px",
                       }}
-                      src={
-                        data.allItems.find((item) => item.id === history.itemId)
-                          .image
-                      }
+                      src={item !== undefined ? item.image : null}
                       alt=""
                     />
                   </td>

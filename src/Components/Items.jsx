@@ -2,32 +2,30 @@ import { useEffect, useState } from "react";
 import { getUsers } from "../api/user/getUsers";
 import { ItemCard } from "./ItemCard";
 
-export const ItemsList = ({ allItemsLoaded }) => {
+export const Items = ({ itemsToShow, filterItems }) => {
   const [allUsers, setAllUsers] = useState([]);
-
   const getAllUsers = async () => {
     return await getUsers().then((users) => {
       setAllUsers(users);
     });
   };
 
-  const maybeItemFilterInput = localStorage.getItem("itemFilterInput");
-  const [itemFilterInput, setItemFilterInput] = useState(
-    maybeItemFilterInput
-      ? JSON.parse(localStorage.getItem("itemFilterInput"))
+  const maybeItemSearchInput = localStorage.getItem("itemSearchInput");
+  const [itemSearchInput, setItemSearchInput] = useState(
+    maybeItemSearchInput
+      ? JSON.parse(localStorage.getItem("itemSearchInput"))
       : ""
   );
 
-  const items = allItemsLoaded;
-  const [filteredItems, setFilteredItems] = useState(items);
-
+  const [items, setItems] = useState(itemsToShow);
+  const [searchedItems, setSearchedItems] = useState(items);
   useEffect(() => {
-    setFilteredItems(
-      items.filter((item) =>
-        item.name.toLowerCase().includes(itemFilterInput.toLowerCase())
+    setSearchedItems(
+      itemsToShow.filter((item) =>
+        item.name.toLowerCase().includes(itemSearchInput.toLowerCase())
       )
     );
-  }, [items, itemFilterInput]);
+  }, [itemsToShow, itemSearchInput]);
 
   useEffect(() => {
     getAllUsers();
@@ -41,13 +39,13 @@ export const ItemsList = ({ allItemsLoaded }) => {
         type="text"
         placeholder="enter item name"
         onChange={(e) => {
-          setItemFilterInput(e.target.value);
+          setItemSearchInput(e.target.value);
           localStorage.setItem(
-            "itemFilterInput",
+            "itemSearchInput",
             JSON.stringify(e.target.value)
           );
         }}
-        value={itemFilterInput}
+        value={itemSearchInput}
       />
 
       <div
@@ -59,8 +57,17 @@ export const ItemsList = ({ allItemsLoaded }) => {
           justifyContent: "space-around",
         }}
       >
-        {filteredItems.map((item) => {
-          return <ItemCard key={item.id} item={item} allUsers={allUsers} />;
+        {searchedItems.map((item) => {
+          return (
+            <ItemCard
+              filterItems={filterItems}
+              key={item.id}
+              item={item}
+              allUsers={allUsers}
+              setItems={setItems}
+              setSearchedItems={setSearchedItems}
+            />
+          );
         })}
       </div>
     </section>

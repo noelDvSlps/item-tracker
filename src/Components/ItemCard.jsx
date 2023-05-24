@@ -2,13 +2,21 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../providers/authProvider";
 import { updateItem } from "../api/item/updateItem";
 import { getItemFromServer } from "../api/item/getItemFromServer";
+import { deleteItemFromServer } from "../api/item/deleteItemFromServer";
 import { updateHistory } from "../api/history/updateHistory";
 import { getItemsHistory } from "../api/history/getItemsHistory";
 import _ from "lodash";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { TrashButton } from "./TrashButton";
+import { getItems } from "../api/item/getItems";
 
-export const ItemCard = ({ item: currentItem, allUsers }) => {
+export const ItemCard = ({
+  item: currentItem,
+  allUsers,
+  filterItems,
+  setSearchedItems,
+}) => {
   const navigate = useNavigate();
   const [itemHistory, setItemHistory] = useState([]);
   const { user, validateUser } = useAuth();
@@ -30,6 +38,17 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
     getHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleDeleteItem = (id) => {
+    deleteItemFromServer(id)
+      .then(() => {
+        getItems().then((response) => {
+          setSearchedItems(response);
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
 
   const handleTransaction = async (e, { isReturningItem }) => {
     e.target.disabled = true;
@@ -54,10 +73,14 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
           const itemFromServer = await getItemFromServer({ itemId: item.id });
           setItem(itemFromServer);
           await getHistory();
+          filterItems();
           e.target.disabled = false;
-        } catch {
-          toast.error("Server Connection Failed");
-          navigate(0);
+        } catch (error) {
+          toast.error("An error occured, you are about to logged out." + error);
+          setTimeout(() => {
+            localStorage.clear();
+            navigate(0);
+          }, 2000);
         }
       } else {
         e.target.disabled = false;
@@ -119,6 +142,11 @@ export const ItemCard = ({ item: currentItem, allUsers }) => {
             (status === "unavailable" ? "Borrower: " : "Returner: ") +
               (user.id === userId ? "YOU" : getUserName(userId))}
         </div>
+        <TrashButton
+          disabled={user.userType === "admin" ? false : true}
+          style={{ border: "1px solid" }}
+          onClick={() => handleDeleteItem(item.id)}
+        />
         {(userId === user.id || status === "available") && (
           <button
             id="btn1"

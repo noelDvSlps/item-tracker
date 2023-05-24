@@ -3,27 +3,31 @@ import { writeFileSync } from "fs";
 const db = {
   users: [
     {
+      userType: "regular",
       fullName: "John Doe",
       username: "username",
       password: "password",
       id: 1,
     },
     {
+      userType: "regular",
       fullName: "Alexis Heart",
       username: "alexis143",
       password: "alexis143",
       id: 1,
     },
     {
+      userType: "regular",
       fullName: "Kirk Hammett",
       username: "hammetk",
       password: "hammetk",
       id: 2,
     },
     {
-      username: "Stephen Curry",
-      password: "stephenc",
-      fullName: "stephenc",
+      userType: "admin",
+      username: "admin",
+      password: "password",
+      fullName: "Stephen Curry",
       id: 3,
     },
   ],
