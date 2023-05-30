@@ -10,6 +10,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { TrashButton } from "./TrashButton";
 import { getItems } from "../api/item/getItems";
+import sha1 from "sha1";
 
 export const ItemCard = ({
   item: currentItem,
@@ -38,8 +39,42 @@ export const ItemCard = ({
     getHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleDeleteItem = (id) => {
-    deleteItemFromServer(id)
+
+  const deleteImageFromCloud = async (publicId) => {
+    //public_id=item-tracker/wzyrtz6bp72o9abkjt42&timestamp=5-27-2023
+    const api_secret = "FQZJ2VMgmGv-XbOkMmzxoX8l-lk";
+    const currentDate = new Date();
+    const unixTime = Math.round(currentDate.getTime() / 1000);
+    const signature = sha1(
+      `public_id=${publicId}&timestamp=${unixTime}${api_secret}`
+    );
+
+    var formdata = new FormData();
+    formdata.append("public_id", publicId);
+    formdata.append("signature", signature);
+    formdata.append("api_key", "183674914573321");
+    formdata.append("timestamp", `${unixTime}`);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      // redirect: "follow",
+    };
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dzseitecy/image/destroy",
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+    return res;
+  };
+
+  const handleDeleteItem = async (item) => {
+    console.log(item);
+    await deleteImageFromCloud(item.publicId);
+    await deleteItemFromServer(item.id)
       .then(() => {
         getItems().then((response) => {
           setSearchedItems(response);
@@ -142,11 +177,13 @@ export const ItemCard = ({
             (status === "unavailable" ? "Borrower: " : "Returner: ") +
               (user.id === userId ? "YOU" : getUserName(userId))}
         </div>
-        <TrashButton
-          disabled={user.userType === "admin" ? false : true}
-          style={{ border: "1px solid" }}
-          onClick={() => handleDeleteItem(item.id)}
-        />
+        {user.userType === "admin" && (
+          <TrashButton
+            // disabled={user.userType === "admin" ? false : true}
+            style={{ border: "1px solid" }}
+            onClick={() => handleDeleteItem(item)}
+          />
+        )}
         {(userId === user.id || status === "available") && (
           <button
             id="btn1"
