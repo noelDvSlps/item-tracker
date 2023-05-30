@@ -1,6 +1,6 @@
 import { API_CONFIG } from "../config";
 
-export const addItem = ({ name, description, image, publicId }) =>
+export const addItem = ({ name, description, image, imagePublicId }) =>
   fetch(API_CONFIG.baseUrl + "/items", {
     headers: {
       "Content-Type": "application/json",
@@ -10,7 +10,7 @@ export const addItem = ({ name, description, image, publicId }) =>
       name,
       description,
       image,
-      publicId,
+      imagePublicId,
       status: "available",
       userId: "null",
     }),

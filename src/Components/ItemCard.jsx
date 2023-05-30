@@ -40,17 +40,17 @@ export const ItemCard = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const deleteImageFromCloud = async (publicId) => {
+  const deleteImageFromCloud = async (imagePublicId) => {
     //public_id=item-tracker/wzyrtz6bp72o9abkjt42&timestamp=5-27-2023
     const api_secret = "FQZJ2VMgmGv-XbOkMmzxoX8l-lk";
     const currentDate = new Date();
     const unixTime = Math.round(currentDate.getTime() / 1000);
     const signature = sha1(
-      `public_id=${publicId}&timestamp=${unixTime}${api_secret}`
+      `public_id=${imagePublicId}&timestamp=${unixTime}${api_secret}`
     );
 
     var formdata = new FormData();
-    formdata.append("public_id", publicId);
+    formdata.append("public_id", imagePublicId);
     formdata.append("signature", signature);
     formdata.append("api_key", "183674914573321");
     formdata.append("timestamp", `${unixTime}`);
@@ -65,24 +65,18 @@ export const ItemCard = ({
       requestOptions
     )
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => console.log("From cloudinary", result))
       .catch((error) => console.log("error", error));
 
     return res;
   };
 
   const handleDeleteItem = async (item) => {
-    console.log(item);
-    await deleteImageFromCloud(item.publicId);
-    await deleteItemFromServer(item.id)
-      .then(() => {
-        getItems().then((response) => {
-          setSearchedItems(response);
-        });
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    await deleteImageFromCloud(item.imagePublicId);
+    await deleteItemFromServer(item.id);
+    await getItems().then((response) => {
+      setSearchedItems(response);
+    });
   };
 
   const handleTransaction = async (e, { isReturningItem }) => {

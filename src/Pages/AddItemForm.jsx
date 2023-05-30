@@ -5,51 +5,50 @@ import { toast } from "react-hot-toast";
 export const AddItemForm = () => {
   const [itemName, setItemName] = useState("");
   const [itemDesc, setItemDesc] = useState("");
-  const [image, setImage] = useState(null);
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState("");
   const [loading, setLoading] = useState(false);
-  const [inputError, setInputError] = useState(false);
 
   const handleChooseFile = (e) => {
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
     data.append("upload_preset", "item-tracker");
-
     setImageData(data);
   };
 
   const uploadImage = async () => {
-    const res = await fetch(
+    const result = await fetch(
       "https://api.cloudinary.com/v1_1/dzseitecy/image/upload",
       { method: "POST", body: imageData }
     );
-    const file = await res.json();
-    console.log("file", file.secure_url);
-    setImage(file.secure_url);
-    return file;
+    const file = await result.json();
+
+    return { file, result };
   };
 
   const handleSubmit = async () => {
     if (itemName.trim() === "" || itemDesc === "" || imageData === "") {
-      setInputError(true);
-    }
-
-    if (inputError === true) {
       toast.error("Missing input(s)");
-      console.log(imageData);
       return;
     }
     setLoading(true);
     const uploadedImg = await uploadImage();
-    console.log(uploadedImg);
+    if (!uploadedImg.result.ok) {
+      toast.error("Failed uploading image!");
+      return;
+    }
     await addItem({
       name: itemName,
       description: itemDesc,
-      image: uploadedImg.secure_url,
-      publicId: uploadedImg.public_id,
+      image: uploadedImg.file.secure_url,
+      imagePublicId: uploadedImg.file.public_id,
     });
+    setImageData(null);
+    setItemDesc("");
+    setItemName("");
     setLoading(false);
+    document.getElementById("add-item-form").reset();
+    toast.success("Item Added!");
   };
   return (
     <section
@@ -103,11 +102,7 @@ export const AddItemForm = () => {
           type="file"
           accept="image/png, image/gif, image/jpeg"
         />
-        {loading ? (
-          <h3>Loading...</h3>
-        ) : (
-          <img src={image} style={{ width: "300px" }} />
-        )}
+        {loading && <h3>Loading...</h3>}
         <input style={{ width: "150px" }} type="submit" value="submit" />
       </form>
     </section>

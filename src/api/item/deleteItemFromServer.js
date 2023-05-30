@@ -8,11 +8,13 @@ export const deleteItemFromServer = (userId) => {
     },
     method: "DELETE",
   };
-  return fetch(urlWithId, requestOptions).then((response) => {
-    if (!response.ok) {
-      console.log(response.statusText);
-      return;
-    }
-    return response.json();
-  });
+  return fetch(urlWithId, requestOptions)
+    .then((response) => {
+      if (!response.ok) {
+        console.log("error", response.statusText);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
