@@ -13,7 +13,6 @@ export const User = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const allItems = useLoaderData();
   const [itemsToShow, setItemsToShow] = useState(allItems);
-
   const filterItems = async () => {
     const allItems = await getItems();
     switch (selectedFilter) {
@@ -23,7 +22,7 @@ export const User = () => {
       case "myTools":
         setItemsToShow(
           allItems.filter((item) => {
-            return item.status === "unavailable" && item.userId === user.id;
+            return item.status === "unavailable" && item.user_Id === user.id;
           })
         );
         break;
@@ -49,12 +48,9 @@ export const User = () => {
   }, [selectedFilter]);
 
   useEffect(() => {
-    // userValidated === false && navigate("../");
     !user && navigate("../");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const itemsToShow = useLoaderData();
 
   user && localStorage.setItem("activeWindow", "user");
 
@@ -63,13 +59,10 @@ export const User = () => {
       style={{
         margin: 0,
         backgroundImage: `url(${Background})`,
-        // backgroundPosition: "top",
-        // backgroundSize: "cover",
-        // backgroundRepeat: "no-repeat",
         minHeight: "85vh",
       }}
     >
-      <ShowFilteredItems onChange={(val) => setSelectedFilter(val)} />
+      {user && <ShowFilteredItems onChange={(val) => setSelectedFilter(val)} />}
       {user && <Items itemsToShow={itemsToShow} filterItems={filterItems} />}
     </section>
   );

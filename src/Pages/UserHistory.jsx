@@ -17,8 +17,9 @@ export const UserHistory = () => {
   }, []);
 
   const data = useLoaderData();
+
   const myHistory = user
-    ? data.history.filter((history) => history.userId === user.id)
+    ? data.history.filter((history) => history.user_Id === user.id)
     : [];
   const sortByDateHistory = myHistory.sort(
     (a, b) => new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
@@ -29,57 +30,63 @@ export const UserHistory = () => {
       style={{
         margin: 0,
         backgroundImage: `url(${Background})`,
-        // backgroundPosition: "top",
-        // backgroundSize: "cover",
-        // backgroundRepeat: "no-repeat",
         minHeight: "100vh",
         padding: "20px",
       }}
     >
-      <h2 style={{ color: "white" }}>My History</h2>
-      <div className="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Transaction</th>
-              <th>ID</th>
-              <th>Description</th>
-              <th>Image</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortByDateHistory.map((history) => {
-              const item = data.allItems.find(
-                (item) => item.id === history.itemId
-              );
-              return (
-                <tr key={history.id}>
-                  <td style={{ width: "20%" }}>{history.timeStamp}</td>
-                  <td>{history.transaction}</td>
-                  <td>{history.itemId}</td>
-                  <td>
-                    {item !== undefined ? item.description : "item was deleted"}
-                  </td>
-                  <td>
-                    <img
-                      style={{
-                        height: "100px",
-                        width: "100px",
-                        borderRadius: "10px",
-                      }}
-                      src={
-                        item !== undefined ? item.image : "items/deleted.png"
-                      }
-                      alt=""
-                    />
-                  </td>
+      {user && (
+        <>
+          <h2 style={{ color: "white" }}>My History</h2>(
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Transaction</th>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>Image</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {sortByDateHistory.map((history) => {
+                  const item = data.allItems.find(
+                    (item) => item.id === history.item_Id
+                  );
+                  return (
+                    <tr key={history.id}>
+                      <td style={{ width: "20%" }}>{history.timeStamp}</td>
+                      <td>{history.transaction}</td>
+                      <td>{history.item_Id}</td>
+                      <td>
+                        {item !== undefined
+                          ? item.description
+                          : "item was deleted"}
+                      </td>
+                      <td>
+                        <img
+                          style={{
+                            height: "100px",
+                            width: "100px",
+                            borderRadius: "10px",
+                          }}
+                          src={
+                            item !== undefined
+                              ? item.image
+                              : "items/deleted.png"
+                          }
+                          alt=""
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          )
+        </>
+      )}
     </div>
   );
 };

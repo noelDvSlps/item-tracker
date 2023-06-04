@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addItem } from "../api/item/addItem";
 import { toast } from "react-hot-toast";
+import { useAuth } from "../providers/authProvider";
+import { useNavigate } from "react-router-dom";
 
 export const AddItemForm = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    !user && navigate("../");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [itemName, setItemName] = useState("");
   const [itemDesc, setItemDesc] = useState("");
   const [imageData, setImageData] = useState("");
@@ -58,53 +67,57 @@ export const AddItemForm = () => {
         justifyContent: "center",
       }}
     >
-      <form
-        style={{
-          color: "white",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        action=""
-        id="add-item-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <h4>Add Item</h4>
-        <label htmlFor="name">Item Name</label>
-        <input
-          style={{ width: "300px" }}
-          type="text"
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
-        />
-        <label htmlFor="description">Item Description</label>
-        <textarea
-          name=""
-          id=""
-          cols="80"
-          rows="10"
-          value={itemDesc}
-          onChange={(e) => setItemDesc(e.target.value)}
-          style={{ marginBottom: "10px" }}
-        ></textarea>
-        <input
+      {user && (
+        <form
           style={{
-            width: "80%",
-            color: "black",
+            color: "white",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          placeholder="Upload an image"
-          name="file"
-          onChange={handleChooseFile}
-          type="file"
-          accept="image/png, image/gif, image/jpeg"
-        />
-        {loading && <h3>Loading...</h3>}
-        <input style={{ width: "150px" }} type="submit" value="submit" />
-      </form>
+          action=""
+          id="add-item-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
+          <h4>Add Item</h4>
+          <label htmlFor="itemName">Item Name</label>
+          <input
+            name="itemName"
+            id="itemName"
+            style={{ width: "300px" }}
+            type="text"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+          />
+          <label htmlFor="itemDesc">Item Description</label>
+          <textarea
+            name="itemDesc"
+            id="itemDesc"
+            cols="80"
+            rows="10"
+            value={itemDesc}
+            onChange={(e) => setItemDesc(e.target.value)}
+            style={{ marginBottom: "10px" }}
+          ></textarea>
+          <input
+            style={{
+              width: "80%",
+              color: "black",
+            }}
+            placeholder="Upload an image"
+            name="file"
+            onChange={handleChooseFile}
+            type="file"
+            accept="image/png, image/gif, image/jpeg"
+          />
+          {loading && <h3>Loading...</h3>}
+          <input style={{ width: "150px" }} type="submit" value="submit" />
+        </form>
+      )}
     </section>
   );
 };

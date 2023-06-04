@@ -1,36 +1,40 @@
 import { writeFileSync } from "fs";
+// import { uniqBy } from "remeda";
+
+const jonDoe = {
+  userType: "regular",
+  fullName: "John Doe",
+  username: "username",
+  password: "password",
+  id: 1,
+};
+
+const alexisHeart = {
+  userType: "regular",
+  fullName: "Alexis Heart",
+  username: "alexis143",
+  password: "alexis143",
+  id: 2,
+};
+
+const kirkHammet = {
+  userType: "regular",
+  fullName: "Kirk Hammett",
+  username: "hammetk",
+  password: "hammetk",
+  id: 3,
+};
+
+const stephenCurry = {
+  userType: "admin",
+  username: "admin",
+  password: "password",
+  fullName: "Stephen Curry",
+  id: 4,
+};
 
 const db = {
-  users: [
-    {
-      userType: "regular",
-      fullName: "John Doe",
-      username: "username",
-      password: "password",
-      id: 1,
-    },
-    {
-      userType: "regular",
-      fullName: "Alexis Heart",
-      username: "alexis143",
-      password: "alexis143",
-      id: 1,
-    },
-    {
-      userType: "regular",
-      fullName: "Kirk Hammett",
-      username: "hammetk",
-      password: "hammetk",
-      id: 2,
-    },
-    {
-      userType: "admin",
-      username: "admin",
-      password: "password",
-      fullName: "Stephen Curry",
-      id: 3,
-    },
-  ],
+  users: [jonDoe, alexisHeart, kirkHammet, stephenCurry],
   items: [
     {
       image: "items/kynupCaliper.png",
@@ -39,7 +43,7 @@ const db = {
         "Kynup Caliper Measuring Tool, Digital Micrometer Caliper Tool",
       status: "available",
       id: 1,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/ballPeinHammer.png",
@@ -47,7 +51,7 @@ const db = {
       description: "Ball Pein hammer Titan - 8 Oz. Ball Pein Hammer",
       status: "available",
       id: 2,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/mitutoyoMicrometer.png",
@@ -55,14 +59,14 @@ const db = {
       description: "Mitutoyo 293-348-30 Digimatic Micrometer",
       status: "available",
       id: 3,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/wiseUpWrench.png",
       name: "Wrench",
       description: "WISEUP Adjustable Wrench 8 Inch Professional Cr-V Forged",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 4,
     },
     {
@@ -71,14 +75,14 @@ const db = {
       description: "Cobra Water Pump Pliers",
       status: "available",
       id: 5,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/workProRatchet.png",
       name: "Ratchet",
       description: "WORKPRO 3/8-Inch Drive Ratchet Wrench",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 6,
     },
     {
@@ -87,7 +91,7 @@ const db = {
       description: "CRAFTSMAN Hammer, Fiberglass",
       status: "available",
       id: 7,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/crimpingTool.png",
@@ -95,7 +99,7 @@ const db = {
       description: "Plustool Crimping Tool for Heat Shrink Connectors AWG22-10",
       status: "available",
       id: 8,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/olympiaClamp.png",
@@ -103,14 +107,14 @@ const db = {
       description: 'Olympia Tools C-Clamp (8" X 4") 38-148',
       status: "available",
       id: 9,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/wihaMagnetizer.png",
       name: "Magnetizer",
       description: "Wiha 40010 | Magnetizer Demagnetizer , Black",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 10,
     },
     {
@@ -119,14 +123,14 @@ const db = {
       description: "Fruholt Multi-function 7mm-19mm Ratchet Universal",
       status: "available",
       id: 11,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/kleinScrewdriver.png",
       name: "Screwdriver",
       description: "Klein Tools 32308 Multi-bit Stubby Screwdriver",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 12,
     },
     {
@@ -136,7 +140,7 @@ const db = {
         "KERYE Mini Hand Saw Woodworking Tools, 6 Inch Japanese Pull Saw",
       status: "available",
       id: 13,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/irwinPliers.png",
@@ -144,7 +148,7 @@ const db = {
       description: "IRWIN VISE-GRIP Convertible Snap Ring Pliers, 6-1/2-Inch",
       status: "available",
       id: 14,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/laoaPliers.png",
@@ -152,14 +156,14 @@ const db = {
       description: "LAOA Needle-Nose Pliers Electrician Pliers",
       status: "available",
       id: 15,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/wihaVoltageTester.png",
       name: "Voltage Tester",
       description: "Wiha Non-Contact Voltage Tester",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 16,
     },
     {
@@ -169,7 +173,7 @@ const db = {
         "Milwaukee 2531-20 12V Brushless Cordless Orbital Detail Sander",
       status: "available",
       id: 17,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/milwaukeeDrill.png",
@@ -177,7 +181,7 @@ const db = {
       description:
         "Milwaukee M18 Li-Ion Cordless Compact Electric Drill Driver",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 18,
     },
     {
@@ -186,7 +190,7 @@ const db = {
       description: "XtremepowerUS 47522 Worm Drive Circular Saw 7-1/4",
       status: "available",
       id: 19,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/laserVoltageTester.png",
@@ -195,7 +199,7 @@ const db = {
         "Lasers & Levels Non-Contact AC Voltage Tester/Voltage Tester Pen",
       status: "available",
       id: 20,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/elvesCutter.png",
@@ -203,7 +207,7 @@ const db = {
       description: "ELves Electrical Wire Cable Cutters",
       status: "available",
       id: 21,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/aicevoosMultimeter.png",
@@ -211,7 +215,7 @@ const db = {
       description:
         "Aicevoos AS-118D Smart Digital Multimeter Auto-Ranging Voltmeter",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 22,
     },
     {
@@ -220,14 +224,14 @@ const db = {
       description: "DEWALT 20V MAX* Belt Sander, Cordless",
       status: "available",
       id: 23,
-      userId: null,
+      user_Id: null,
     },
     {
       image: "items/electricCaulking.png",
       name: "Electric Caulking Gun",
       description: "Electric Caulking Gun Cordless",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 24,
     },
     {
@@ -236,11 +240,17 @@ const db = {
       description:
         "Kawasaki 840176 Green 5.8 Amp 3/8-Inch Variable Speed Reversible Drill",
       status: "available",
-      userId: null,
+      user_Id: null,
       id: 25,
     },
   ],
   itemsHistory: [],
 };
+
+// const items = db.items;
+
+// if (items.length !== uniqBy(db.items, (item) => item.id).length) {
+//   throw new Error("invalid id's in items");
+// }
 
 writeFileSync("db.json", JSON.stringify(db), { encoding: "utf-8" });

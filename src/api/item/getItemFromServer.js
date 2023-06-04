@@ -1,10 +1,10 @@
 import { getItems } from "./getItems";
 
-export const getItemFromServer = ({ itemId }) => {
+export const getItemFromServer = ({ item_Id }) => {
   return getItems()
     .then((items) =>
       items.find((item) => {
-        return item.id === itemId;
+        return item.id === item_Id;
       })
     )
     .then((item) => {

@@ -1,6 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 export const RootLayout = () => {
@@ -8,9 +7,10 @@ export const RootLayout = () => {
   const { logout, validateUser, user } = useAuth();
 
   const handleLogOut = () => {
-    localStorage.clear();
+    // localStorage.clear();
     logout();
-    navigate(0); //refresh
+    navigate("/"); //refresh
+    navigate(0);
   };
 
   const userValidationErrHandler = async () => {
@@ -25,17 +25,6 @@ export const RootLayout = () => {
       }, 2000);
     }
   };
-  useEffect(() => {
-    // const maybeUser = JSON.parse(localStorage.getItem("user"));
-    // maybeUser && validateUser(maybeUser.id);
-    // if (!user) {
-    //   navigate("../");
-    //   localStorage.clear();
-    // } else {
-    //   userValidationErrHandler();
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className="root-layout">

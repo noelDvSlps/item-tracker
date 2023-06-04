@@ -12,15 +12,9 @@ export const Main = () => {
   const { validateUser, user } = useAuth();
   const allUsers = useLoaderData();
   const navigate = useNavigate();
-  const [form, setForm] = useState("Login");
-  const [forms, setForms] = useState(["Login", "Register"]);
+  const [currentForm, setCurrentForm] = useState("Login");
   const maybeUser = JSON.parse(localStorage.getItem("user"));
   maybeUser && validateUser(maybeUser.id);
-
-  const swapForms = () => {
-    setForms([forms[1], forms[0]]);
-    return forms[1];
-  };
 
   useEffect(() => {
     user && navigate("../User");
@@ -38,7 +32,7 @@ export const Main = () => {
           padding: "30px",
         }}
       >
-        {form === "Login" ? (
+        {currentForm === "Login" ? (
           <LoginForm />
         ) : (
           <RegisterForm allUsers={allUsers} />
@@ -46,13 +40,13 @@ export const Main = () => {
         <div style={{ textAlign: "right", padding: "10px" }}>
           <Link
             onClick={() => {
-              setForm(swapForms());
+              setCurrentForm(currentForm === "Login" ? "Register" : "Login");
             }}
             style={{
               color: "orange",
             }}
           >
-            {forms[1]}
+            {currentForm === "Login" ? "Register" : "Login"}
           </Link>
         </div>
       </div>

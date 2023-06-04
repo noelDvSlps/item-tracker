@@ -5,6 +5,7 @@ import {
   onlyTextValidation,
   passwordValidation,
   alphaNumericValidation,
+  comparePasswords,
 } from "../validations/validations";
 import { useNavigate } from "react-router-dom";
 
@@ -23,19 +24,6 @@ export const RegisterForm = ({ allUsers }) => {
   const { register, login } = useAuth();
   const navigate = useNavigate();
 
-  const handleBlur = ({ target: { name, value } }, callBackFunction) => {
-    setInputErrors((existingValues) => ({
-      ...existingValues,
-      [name + "Error"]: callBackFunction(value),
-    }));
-  };
-
-  const comparePasswords = (confirmPassword) => {
-    return passwordInput === confirmPassword
-      ? undefined
-      : "Passwords should be the same";
-  };
-
   const isUsernameExist = (username) => {
     // eslint-disable-next-line react/prop-types
     const result = allUsers.find((user) => user.username === username);
@@ -43,10 +31,11 @@ export const RegisterForm = ({ allUsers }) => {
   };
 
   const isOkToRegister = () => {
+    // console.log(!onlyTextValidation(fullNameInput));
     if (
-      onlyTextValidation(fullNameInput) ||
-      alphaNumericValidation(usernameInput) ||
-      passwordValidation(passwordInput) ||
+      onlyTextValidation(fullNameInput) &&
+      alphaNumericValidation(usernameInput) &&
+      passwordValidation(passwordInput) &&
       comparePasswords(confirmPasswordInput)
     ) {
       return false;
@@ -113,7 +102,15 @@ export const RegisterForm = ({ allUsers }) => {
           }}
           value={fullNameInput}
           autoComplete=""
-          onBlur={(e) => handleBlur(e, onlyTextValidation)}
+          onBlur={(e) => {
+            const err = !onlyTextValidation(e.target.value)
+              ? "Alphabetic only"
+              : undefined;
+            setInputErrors((existingValues) => ({
+              ...existingValues,
+              ["fullNameError"]: err,
+            }));
+          }}
         />
         <div
           style={{
@@ -134,7 +131,15 @@ export const RegisterForm = ({ allUsers }) => {
           }}
           value={usernameInput}
           autoComplete=""
-          onBlur={(e) => handleBlur(e, alphaNumericValidation)}
+          onBlur={(e) => {
+            const err = !alphaNumericValidation(e.target.value)
+              ? "Alphanumeric only"
+              : undefined;
+            setInputErrors((existingValues) => ({
+              ...existingValues,
+              ["usernameError"]: err,
+            }));
+          }}
         />
         <div
           style={{
@@ -155,7 +160,16 @@ export const RegisterForm = ({ allUsers }) => {
           }}
           value={passwordInput}
           autoComplete=""
-          onBlur={(e) => handleBlur(e, passwordValidation)}
+          onBlur={(e) => {
+            const err = !passwordValidation(e.target.value)
+              ? "Invalid Password: numbers and letters, special characters allowed !@#$%^&*()_+, number of characters should be greater than 8 but less than 21 "
+              : undefined;
+            setInputErrors((existingValues) => ({
+              ...existingValues,
+              ["passwordInputError"]: err,
+            }));
+          }}
+          //
         />
         <div
           style={{
@@ -175,7 +189,15 @@ export const RegisterForm = ({ allUsers }) => {
           }}
           value={confirmPasswordInput}
           autoComplete=""
-          onBlur={(e) => handleBlur(e, comparePasswords)}
+          onBlur={(e) => {
+            const err = !comparePasswords(passwordInput, e.target.value)
+              ? "Passwords should be the same "
+              : undefined;
+            setInputErrors((existingValues) => ({
+              ...existingValues,
+              ["confirmPasswordInputError"]: err,
+            }));
+          }}
         />
         <div
           style={{

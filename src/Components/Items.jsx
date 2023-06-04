@@ -33,8 +33,12 @@ export const Items = ({ itemsToShow, filterItems }) => {
 
   return (
     <section style={{ padding: "50px" }}>
-      <label style={{ color: "white" }}>Search Item </label>
+      <label style={{ color: "white" }} htmlFor="searchItem">
+        Search Item{" "}
+      </label>
       <input
+        id="searchItem"
+        name="searchItem"
         style={{ width: "200px" }}
         type="text"
         placeholder="enter item name"

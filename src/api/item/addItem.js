@@ -12,7 +12,7 @@ export const addItem = ({ name, description, image, imagePublicId }) =>
       image,
       imagePublicId,
       status: "available",
-      userId: "null",
+      user_Id: null,
     }),
   }).then((response) => {
     if (!response.ok) {

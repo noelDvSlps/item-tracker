@@ -22,14 +22,14 @@ export const ItemCard = ({
   const [itemHistory, setItemHistory] = useState([]);
   const { user, validateUser } = useAuth();
   const [item, setItem] = useState(currentItem);
-  const { name, description, status, userId, image } = item;
+  const { name, description, status, user_Id, image } = item;
   const userValidationErrHandler = useOutletContext();
 
   const getHistory = async () => {
     await getItemsHistory().then((history) => {
       const sortedHistory = _.orderBy(history, ["timeStamp"], ["desc"]);
       const filteredHistoryByItem = sortedHistory
-        ? _.filter(sortedHistory, { itemId: item.id })
+        ? _.filter(sortedHistory, { item_Id: item.id })
         : null;
       setItemHistory(filteredHistoryByItem);
     });
@@ -41,7 +41,7 @@ export const ItemCard = ({
   }, []);
 
   const deleteImageFromCloud = async (imagePublicId) => {
-    //public_id=item-tracker/wzyrtz6bp72o9abkjt42&timestamp=5-27-2023
+    //I exposed these for now
     const api_secret = "FQZJ2VMgmGv-XbOkMmzxoX8l-lk";
     const currentDate = new Date();
     const unixTime = Math.round(currentDate.getTime() / 1000);
@@ -49,23 +49,23 @@ export const ItemCard = ({
       `public_id=${imagePublicId}&timestamp=${unixTime}${api_secret}`
     );
 
-    var formdata = new FormData();
+    const formdata = new FormData();
     formdata.append("public_id", imagePublicId);
     formdata.append("signature", signature);
     formdata.append("api_key", "183674914573321");
     formdata.append("timestamp", `${unixTime}`);
 
-    var requestOptions = {
+    const requestOptions = {
       method: "POST",
       body: formdata,
-      // redirect: "follow",
     };
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dzseitecy/image/destroy",
       requestOptions
     )
-      .then((response) => response.text())
-      .then((result) => console.log("From cloudinary", result))
+      //enable lines below to see cloudinary results
+      // .then((response) => response.text())
+      // .then((result) => console.log("From cloudinary", result))
       .catch((error) => console.log("error", error));
 
     return res;
@@ -94,12 +94,12 @@ export const ItemCard = ({
         try {
           await updateItem(item.id, user.id, itemStatus);
           await updateHistory({
-            userId: user.id,
+            user_Id: user.id,
             transaction: isReturningItem ? "Return" : "Borrow",
-            itemId: item.id,
+            item_Id: item.id,
             timeStamp: transactionDate,
           });
-          const itemFromServer = await getItemFromServer({ itemId: item.id });
+          const itemFromServer = await getItemFromServer({ item_Id: item.id });
           setItem(itemFromServer);
           await getHistory();
           filterItems();
@@ -121,9 +121,9 @@ export const ItemCard = ({
     }
   };
 
-  const getUserName = (userId) => {
-    return allUsers.find((user) => user.id === userId)
-      ? allUsers.find((user) => user.id === userId).fullName
+  const getUserName = (user_Id) => {
+    return allUsers.find((user) => user.id === user_Id)
+      ? allUsers.find((user) => user.id === user_Id).fullName
       : "Error";
   };
 
@@ -165,11 +165,14 @@ export const ItemCard = ({
         </div>
         <div> {itemHistory[0] && `Date: ${itemHistory[0].timeStamp} `} </div>
         <div
-          style={{ minHeight: "32px", color: user.id === userId && "orange" }}
+          style={{
+            minHeight: "32px",
+            color: user.id === user_Id && "orange",
+          }}
         >
           {itemHistory.length > 0 &&
             (status === "unavailable" ? "Borrower: " : "Returner: ") +
-              (user.id === userId ? "YOU" : getUserName(userId))}
+              (user.id === user_Id ? "YOU" : getUserName(user_Id))}
         </div>
         {user.userType === "admin" && (
           <TrashButton
@@ -178,24 +181,25 @@ export const ItemCard = ({
             onClick={() => handleDeleteItem(item)}
           />
         )}
-        {(userId === user.id || status === "available") && (
+        {(user_Id === user.id || status === "available") && (
           <button
             id="btn1"
             className="btn-card"
-            //NOTE: if user.id === userId {returning an item} else {borrowing an item}
+            //NOTE: if user.id === user_Id {returning an item} else {borrowing an item}
             onClick={(e) =>
               handleTransaction(e, {
-                isReturningItem: user.id === userId && status === "unavailable",
+                isReturningItem:
+                  user.id === user_Id && status === "unavailable",
               })
             }
             style={{
               backgroundColor:
-                user.id === userId && status === "unavailable"
+                user.id === user_Id && status === "unavailable"
                   ? "maroon"
                   : "orange",
             }}
           >
-            {user.id === userId && status === "unavailable"
+            {user.id === user_Id && status === "unavailable"
               ? "Return"
               : "Borrow"}
           </button>

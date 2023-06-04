@@ -12,7 +12,7 @@ export const ShowFilteredItems = ({ onChange }) => {
           marginLeft: "20px",
         }}
         name="filterShow"
-        id="filter"
+        id="filterShow"
         onChange={(e) => onChange(e.target.value)}
       >
         <option value="all">SHOW ALL</option>

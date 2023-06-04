@@ -14,11 +14,11 @@
   "dependencies": {
     "hot": "^0.0.7",
     "json-server": "^0.17.3",
-    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.11.1",
+    "remeda": "^1.19.0",
     "sha1": "^1.1.1",
     "toast": "^0.5.4"
   },
