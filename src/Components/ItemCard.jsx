@@ -72,11 +72,13 @@ export const ItemCard = ({
   };
 
   const handleDeleteItem = async (item) => {
+    document.getElementById("item-card").style.cursor = "wait";
     await deleteImageFromCloud(item.imagePublicId);
     await deleteItemFromServer(item.id);
     await getItems().then((response) => {
       setSearchedItems(response);
     });
+    document.getElementById("item-card").style.cursor = "pointer";
   };
 
   const handleTransaction = async (e, { isReturningItem }) => {
@@ -128,7 +130,7 @@ export const ItemCard = ({
   };
 
   return (
-    <div className="item-card">
+    <div className="item-card" id="item-card">
       <div style={{ width: "100%" }}>
         <div>ID: {item.id}</div>
         <div

@@ -15,7 +15,7 @@ export const AddItemForm = () => {
   const [itemName, setItemName] = useState("");
   const [itemDesc, setItemDesc] = useState("");
   const [imageData, setImageData] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleChooseFile = (e) => {
     const files = e.target.files;
@@ -40,7 +40,7 @@ export const AddItemForm = () => {
       toast.error("Missing input(s)");
       return;
     }
-    setLoading(true);
+    setUploading(true);
     const uploadedImg = await uploadImage();
     if (!uploadedImg.result.ok) {
       toast.error("Failed uploading image!");
@@ -55,7 +55,7 @@ export const AddItemForm = () => {
     setImageData(null);
     setItemDesc("");
     setItemName("");
-    setLoading(false);
+    setUploading(false);
     document.getElementById("add-item-form").reset();
     toast.success("Item Added!");
   };
@@ -114,8 +114,12 @@ export const AddItemForm = () => {
             type="file"
             accept="image/png, image/gif, image/jpeg"
           />
-          {loading && <h3>Loading...</h3>}
-          <input style={{ width: "150px" }} type="submit" value="submit" />
+
+          <input
+            style={{ width: "150px", cursor: uploading ? "wait" : "pointer" }}
+            type="submit"
+            value={uploading ? "Uploading..." : "Submit"}
+          />
         </form>
       )}
     </section>
