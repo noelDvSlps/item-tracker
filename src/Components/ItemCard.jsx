@@ -62,30 +62,34 @@ export const ItemCard = ({
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dzseitecy/image/destroy",
       requestOptions
-    )
-      //enable lines below to see cloudinary results
-      // .then((response) => response.text())
-      // .then((result) => console.log("From cloudinary", result))
-      .catch((error) => console.log("error", error));
+    ).catch((error) => console.log("error", error));
 
     return res;
   };
 
-  const handleDeleteItem = async (item) => {
-    document.getElementById("item-card").style.cursor = "wait";
+  const handleDeleteItem = async (e, item) => {
+    toast.loading("Please wait...");
     await deleteImageFromCloud(item.imagePublicId);
-    await deleteItemFromServer(item.id);
-    await getItems().then((response) => {
-      setSearchedItems(response);
+    await deleteItemFromServer(item.id).then((res) => {
+      if (res.ok) {
+        toast.dismiss();
+        toast.success("Deleted");
+      } else {
+        toast.dismiss();
+        toast.error(" Not Deleted");
+      }
     });
-    document.getElementById("item-card").style.cursor = "pointer";
+
+    await getItems().then((items) => {
+      setSearchedItems(items);
+    });
   };
 
   const handleTransaction = async (e, { isReturningItem }) => {
     e.target.disabled = true;
     try {
       const validUser = await validateUser(
-        JSON.parse(localStorage.getItem("user")).id
+        JSON.parse(localStorage.getItem("userInformation")).username
       );
 
       if (validUser) {
@@ -178,9 +182,8 @@ export const ItemCard = ({
         </div>
         {user.userType === "admin" && (
           <TrashButton
-            // disabled={user.userType === "admin" ? false : true}
-            style={{ border: "1px solid" }}
-            onClick={() => handleDeleteItem(item)}
+            className="trash-button"
+            onClick={(e) => handleDeleteItem(e, item)}
           />
         )}
         {(user_Id === user.id || status === "available") && (

@@ -35,17 +35,28 @@ export const AddItemForm = () => {
     return { file, result };
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    const submitButton = e.target.querySelector("#submit");
+    submitButton.disabled = true;
+    toast.loading("Please wait, adding new item");
+
     if (itemName.trim() === "" || itemDesc === "" || imageData === "") {
+      toast.dismiss();
+      submitButton.disabled = false;
       toast.error("Missing input(s)");
+
       return;
     }
     setUploading(true);
     const uploadedImg = await uploadImage();
     if (!uploadedImg.result.ok) {
-      toast.error("Failed uploading image!");
+      submitButton.disabled = false;
+      toast.dismiss();
+      toast.error("No image selected or failed uploading image!");
+
       return;
     }
+
     await addItem({
       name: itemName,
       description: itemDesc,
@@ -55,10 +66,14 @@ export const AddItemForm = () => {
     setImageData(null);
     setItemDesc("");
     setItemName("");
-    setUploading(false);
+
     document.getElementById("add-item-form").reset();
+    submitButton.disabled = false;
+    toast.dismiss();
     toast.success("Item Added!");
+    setUploading(false);
   };
+
   return (
     <section
       className="pages"
@@ -80,7 +95,7 @@ export const AddItemForm = () => {
           id="add-item-form"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            handleSubmit(e);
           }}
         >
           <h4>Add Item</h4>
@@ -116,6 +131,7 @@ export const AddItemForm = () => {
           />
 
           <input
+            id="submit"
             style={{ width: "150px", cursor: uploading ? "wait" : "pointer" }}
             type="submit"
             value={uploading ? "Uploading..." : "Submit"}

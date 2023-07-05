@@ -30,7 +30,7 @@ export const UserTools = () => {
     (a, b) => new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
   );
 
-  localStorage.setItem("activeWindow", "userTools");
+  user && localStorage.setItem("activeWindow", "userTools");
 
   return (
     <section

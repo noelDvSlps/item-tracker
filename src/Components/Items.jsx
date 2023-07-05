@@ -17,8 +17,8 @@ export const Items = ({ itemsToShow, filterItems }) => {
       : ""
   );
 
-  const [items, setItems] = useState(itemsToShow);
-  const [searchedItems, setSearchedItems] = useState(items);
+  // const [items, setItems] = useState(itemsToShow);
+  const [searchedItems, setSearchedItems] = useState(itemsToShow);
   useEffect(() => {
     setSearchedItems(
       itemsToShow.filter((item) =>
@@ -68,7 +68,6 @@ export const Items = ({ itemsToShow, filterItems }) => {
               key={item.id}
               item={item}
               allUsers={allUsers}
-              setItems={setItems}
               setSearchedItems={setSearchedItems}
             />
           );

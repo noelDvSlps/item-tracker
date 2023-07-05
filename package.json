@@ -12,6 +12,7 @@
     "server": "npx json-server --watch db.json"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
     "hot": "^0.0.7",
     "json-server": "^0.17.3",
     "react": "^18.2.0",

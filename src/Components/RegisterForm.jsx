@@ -31,7 +31,6 @@ export const RegisterForm = ({ allUsers }) => {
   };
 
   const isOkToRegister = () => {
-    // console.log(!onlyTextValidation(fullNameInput));
     if (
       onlyTextValidation(fullNameInput) &&
       alphaNumericValidation(usernameInput) &&
@@ -74,14 +73,13 @@ export const RegisterForm = ({ allUsers }) => {
             };
             register(newUser)
               .then(() => {
-                toast.success("registered");
                 login({ username: usernameInput, password: passwordInput });
-                navigate(0);
+                toast.success("registered");
               })
               .catch(() => {
                 toast.error("registration failed");
               });
-            localStorage.setItem("user", JSON.stringify(newUser));
+            // localStorage.setItem("user", JSON.stringify(newUser));
 
             setUsernameInput("");
             setPasswordInput("");

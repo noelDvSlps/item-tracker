@@ -9,7 +9,7 @@ import { useAuth } from "../providers/authProvider";
 export const UserHistory = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  localStorage.setItem("activeWindow", "userHistory");
+  user && localStorage.setItem("activeWindow", "userHistory");
 
   useEffect(() => {
     !user && navigate("/");

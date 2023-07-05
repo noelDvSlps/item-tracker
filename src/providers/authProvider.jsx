@@ -4,30 +4,32 @@ import { getUserByUsername } from "../api/user/getUserFromServer";
 import { toast } from "react-hot-toast";
 import { registerFetch } from "../api/user/register";
 import { getUsers } from "../api/user/getUsers";
+import { signIn } from "../api/user/signIn";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loginSuccess, setLoginSuccess] = useState(false);
+
   const register = ({ username, password, fullName }) => {
     return registerFetch({ username, password, fullName }).then((user) => {
-      localStorage.setItem("user", JSON.stringify(user));
       return setUser(user);
     });
   };
 
   const login = async ({ username, password }) => {
-    const user = await getUserByUsername({ username });
-    if (user.password !== password) {
-      setLoginSuccess(false);
-      throw new Error("wrong password");
-    }
-
+    const userMaybe = await getUserByUsername({ username }); //will throw an error if !username
+    const signInResponse = await signIn({ username, password }); //will throw an err if password failed
+    //if no error proceed with code below
     setLoginSuccess(true);
     toast.success(`Welcome ${username}`);
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
+    localStorage.setItem("token", signInResponse.token);
+    localStorage.setItem(
+      "userInformation",
+      JSON.stringify(signInResponse.userInformation)
+    );
+    setUser(userMaybe);
   };
 
   const logout = () => {
@@ -35,11 +37,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear();
   };
 
-  const maybeUser = localStorage.getItem("user");
+  //check if a user is still logged in
+  const maybeUser = localStorage.getItem("userInformation");
 
-  const validateUser = async (id) => {
+  const validateUser = async (username) => {
     const allUsers = await getUsers();
-    const user = await allUsers.find((user) => user.id === id);
+    const user = await allUsers.find((user) => user.username === username);
 
     if (user === undefined) {
       setUser(null);

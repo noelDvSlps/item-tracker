@@ -10,7 +10,7 @@ export const updateHistory = ({ user_Id, transaction, item_Id, timeStamp }) =>
       user_Id,
       transaction,
       item_Id,
-      timeStamp,
+      timeStamp: new Date(timeStamp),
     }),
   }).then((response) => {
     if (!response.ok) {

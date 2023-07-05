@@ -15,8 +15,11 @@ export const RootLayout = () => {
 
   const userValidationErrHandler = async () => {
     // if localstorage "user.id" was changed or the whole object is deleted or user.id = noMatch
-    const maybeUser = JSON.parse(localStorage.getItem("user"));
-    const isUserValid = maybeUser ? await validateUser(maybeUser.id) : false;
+    const maybeUser = JSON.parse(localStorage.getItem("userInformation"));
+
+    const isUserValid = maybeUser
+      ? await validateUser(maybeUser.username)
+      : false;
     if (isUserValid === false) {
       toast.error("You are logged out. You need to log in again");
       setTimeout(() => {

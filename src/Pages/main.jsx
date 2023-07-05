@@ -13,8 +13,8 @@ export const Main = () => {
   const allUsers = useLoaderData();
   const navigate = useNavigate();
   const [currentForm, setCurrentForm] = useState("Login");
-  const maybeUser = JSON.parse(localStorage.getItem("user"));
-  maybeUser && validateUser(maybeUser.id);
+  const maybeUser = JSON.parse(localStorage.getItem("userInformation"));
+  maybeUser && validateUser(maybeUser.username);
 
   useEffect(() => {
     user && navigate("../User");
