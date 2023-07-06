@@ -57,20 +57,31 @@ export const AddItemForm = () => {
       return;
     }
 
-    await addItem({
+    const addItemResponse = await addItem({
       name: itemName,
       description: itemDesc,
       image: uploadedImg.file.secure_url,
       imagePublicId: uploadedImg.file.public_id,
+    }).catch((error) => {
+      toast.dismiss();
+      toast.error("An error occured, you are about to logged out." + error);
+      setTimeout(() => {
+        localStorage.clear();
+        navigate(0);
+      }, 2000);
     });
+
     setImageData(null);
     setItemDesc("");
     setItemName("");
 
+    if (addItemResponse) {
+      toast.dismiss();
+      toast.success("Item Added!");
+    }
+
     document.getElementById("add-item-form").reset();
     submitButton.disabled = false;
-    toast.dismiss();
-    toast.success("Item Added!");
     setUploading(false);
   };
 

@@ -4,6 +4,7 @@ export const updateHistory = ({ user_Id, transaction, item_Id, timeStamp }) =>
   fetch(API_CONFIG.baseUrl + "/itemsHistory", {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     method: "POST",
     body: JSON.stringify({

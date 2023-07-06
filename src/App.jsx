@@ -36,6 +36,7 @@ const router = createBrowserRouter(
         path="AddItem"
         element={<AddItemForm />}
         loader={userToolsLoader}
+        errorElement={<ErrorElement />}
       />
 
       <Route path="*" element={<NotFound />} />

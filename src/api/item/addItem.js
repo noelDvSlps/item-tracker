@@ -4,6 +4,7 @@ export const addItem = ({ name, description, image, imagePublicId }) =>
   fetch(API_CONFIG.baseUrl + "/items", {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     method: "POST",
     body: JSON.stringify({
@@ -16,7 +17,7 @@ export const addItem = ({ name, description, image, imagePublicId }) =>
     }),
   }).then((response) => {
     if (!response.ok) {
-      throw new Error("adding History failed");
+      throw new Error("adding Item failed");
     }
     return response.json();
   });

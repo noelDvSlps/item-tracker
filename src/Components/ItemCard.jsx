@@ -76,7 +76,13 @@ export const ItemCard = ({
         toast.success("Deleted");
       } else {
         toast.dismiss();
-        toast.error(" Not Deleted");
+        toast.error(
+          "Item not deleted. An error occured. You need to log in again"
+        );
+        setTimeout(() => {
+          localStorage.clear();
+          navigate(0);
+        }, 2000);
       }
     });
 
