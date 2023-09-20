@@ -55,6 +55,7 @@ export const User = () => {
   }, [user]);
 
   useEffect(() => {
+    "alert filter";
     filterItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilter]);
@@ -76,6 +77,10 @@ export const User = () => {
 };
 
 export const allItemsLoader = async () => {
-  const res = await getItems();
-  return res;
+  const userInfo = localStorage.getItem("userInformation");
+  if (!userInfo) {
+    return null;
+  }
+  // const res = await getItems();
+  return await getItems();
 };
