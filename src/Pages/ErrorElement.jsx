@@ -1,4 +1,5 @@
 import { useRouteError } from "react-router-dom";
+import Background from "../assets/images/tools.png";
 
 export const ErrorElement = () => {
   const error = useRouteError();
@@ -10,6 +11,7 @@ export const ErrorElement = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundImage: `url(${Background})`,
       }}
     >
       <div

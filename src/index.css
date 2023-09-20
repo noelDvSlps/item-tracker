@@ -85,7 +85,7 @@ h1 {
   grid-template-columns: 2fr 1fr;
   grid-auto-flow: column;
   padding: 50px;
-  background-image: url("background/tools.png");
+  /* background-image: url("background/tools.png"); */
   align-items: center;
   gap: 25px;
 }

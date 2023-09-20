@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 //Components
 import { PageBackground } from "../Components/PageBackground";
+import Background from "../assets/images/tools.png";
 import { LoginForm } from "../Components/LoginForm";
 import { RegisterForm } from "../Components/RegisterForm";
 import { useEffect, useState } from "react";
@@ -21,7 +22,14 @@ export const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <section>
+    <section
+      className="pages"
+      style={{
+        margin: 0,
+        backgroundImage: `url(${Background})`,
+        minHeight: "85vh",
+      }}
+    >
       <div>
         <PageBackground />
       </div>

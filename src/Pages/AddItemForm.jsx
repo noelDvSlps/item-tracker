@@ -3,6 +3,7 @@ import { addItem } from "../api/item/addItem";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../providers/authProvider";
 import { useNavigate } from "react-router-dom";
+import Background from "../assets/images/tools.png";
 
 export const AddItemForm = () => {
   const { user } = useAuth();
@@ -91,6 +92,7 @@ export const AddItemForm = () => {
       style={{
         display: "flex",
         justifyContent: "center",
+        backgroundImage: `url(${Background})`,
       }}
     >
       {user && (
