@@ -43,14 +43,14 @@ export const User = () => {
   };
 
   useEffect(() => {
+    !user && navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     filterItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilter]);
-
-  useEffect(() => {
-    !user && navigate("../");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   user && localStorage.setItem("activeWindow", "user");
 
