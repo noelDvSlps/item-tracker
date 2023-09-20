@@ -9,6 +9,7 @@ export const RootLayout = () => {
   const handleLogOut = () => {
     // localStorage.clear();
     logout();
+    alert("logged out. about to navigate");
     navigate("/"); //refresh
     navigate(0);
   };
