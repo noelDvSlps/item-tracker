@@ -10,8 +10,8 @@ export const RootLayout = () => {
     // localStorage.clear();
     logout();
     alert("logged out. about to navigate");
-    // navigate("../"); //refresh
-    // alert("navigaet('/') called. ");
+    navigate("../"); //refresh
+    alert("navigaet('/') called. ");
     navigate(0);
     alert("navigaet('0') called. ");
   };

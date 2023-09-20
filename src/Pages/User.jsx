@@ -8,11 +8,12 @@ import { useAuth } from "../providers/authProvider";
 import { ShowFilteredItems } from "../Components/ShowFilteredItems";
 
 export const User = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [selectedFilter, setSelectedFilter] = useState("all");
   const allItems = useLoaderData();
   const [itemsToShow, setItemsToShow] = useState(allItems);
+
   const filterItems = async () => {
     const allItems = await getItems();
     switch (selectedFilter) {
@@ -43,7 +44,10 @@ export const User = () => {
   };
 
   useEffect(() => {
-    !user && navigate("/");
+    if (!user) {
+      logout();
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
