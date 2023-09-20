@@ -11,7 +11,9 @@ export const RootLayout = () => {
     logout();
     alert("logged out. about to navigate");
     navigate("/"); //refresh
+    alert("navigaet('/') called. ");
     navigate(0);
+    alert("navigaet('0') called. ");
   };
 
   const userValidationErrHandler = async () => {
