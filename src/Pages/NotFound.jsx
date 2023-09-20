@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Background from "../assets/images/tools.png";
 
 export const NotFound = () => {
   return (
@@ -8,6 +9,7 @@ export const NotFound = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundImage: `url(${Background})`,
       }}
     >
       <div

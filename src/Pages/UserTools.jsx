@@ -9,7 +9,7 @@ import { useAuth } from "../providers/authProvider";
 export const UserTools = () => {
   const navigate = useNavigate();
   const userToolsLoaded = useLoaderData(); //{items: ..., history: ,,,}
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const userHistory = user
     ? userToolsLoaded.history.filter(
         (transaction) => transaction.user_Id === user.id
@@ -22,7 +22,11 @@ export const UserTools = () => {
     : [];
 
   useEffect(() => {
-    !user && navigate("/");
+    const userInfo = localStorage.getItem("userInformation");
+    if (!user || !userInfo) {
+      logout();
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

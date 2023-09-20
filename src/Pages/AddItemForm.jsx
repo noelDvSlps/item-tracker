@@ -6,10 +6,14 @@ import { useNavigate } from "react-router-dom";
 import Background from "../assets/images/tools.png";
 
 export const AddItemForm = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    !user && navigate("../");
+    const userInfo = localStorage.getItem("userInformation");
+    if (!user || !userInfo) {
+      logout();
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

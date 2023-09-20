@@ -44,12 +44,13 @@ export const User = () => {
   };
 
   useEffect(() => {
-    if (!user) {
+    const userInfo = localStorage.getItem("userInformation");
+    if (!user || !userInfo) {
       logout();
       navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     filterItems();

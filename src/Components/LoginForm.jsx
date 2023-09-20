@@ -10,6 +10,7 @@ export const LoginForm = () => {
   const { login, loginSuccess } = useAuth();
 
   useEffect(() => {
+    console.log("loginform");
     loginSuccess && navigate("../User");
   }, [loginSuccess, navigate]);
 

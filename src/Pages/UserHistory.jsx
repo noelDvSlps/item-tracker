@@ -8,11 +8,15 @@ import { useAuth } from "../providers/authProvider";
 
 export const UserHistory = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   user && localStorage.setItem("activeWindow", "userHistory");
 
   useEffect(() => {
-    !user && navigate("/");
+    const userInfo = localStorage.getItem("userInformation");
+    if (!user || !userInfo) {
+      logout();
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

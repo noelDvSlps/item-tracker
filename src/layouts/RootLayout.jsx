@@ -7,13 +7,7 @@ export const RootLayout = () => {
   const { logout, validateUser, user } = useAuth();
 
   const handleLogOut = () => {
-    // localStorage.clear();
     logout();
-    alert("logged out. about to navigate");
-    navigate("../"); //refresh
-    alert("navigaet('/') called. ");
-    navigate(0);
-    alert("navigaet('0') called. ");
   };
 
   const userValidationErrHandler = async () => {
@@ -24,10 +18,10 @@ export const RootLayout = () => {
       ? await validateUser(maybeUser.username)
       : false;
     if (isUserValid === false) {
-      toast.error("You are logged out. You need to log in again");
+      toast.error("You are logged out. You need need to log in again");
       setTimeout(() => {
         localStorage.clear();
-        navigate(0);
+        navigate("/");
       }, 2000);
     }
   };
@@ -64,7 +58,7 @@ export const RootLayout = () => {
                   AddItem
                 </NavLink>
               )}
-              <Link to={""} onClick={handleLogOut}>
+              <Link to={"/"} onClick={handleLogOut}>
                 Log Out
               </Link>
             </>
