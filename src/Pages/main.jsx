@@ -21,7 +21,7 @@ export const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <section className="pages">
+    <section>
       <div>
         <PageBackground />
       </div>
