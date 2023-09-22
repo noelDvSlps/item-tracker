@@ -52,11 +52,11 @@ export const User = () => {
       navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     "alert filter";
-    filterItems();
+    user && filterItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilter]);
 
