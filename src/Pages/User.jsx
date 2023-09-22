@@ -44,10 +44,8 @@ export const User = () => {
   };
 
   useEffect(() => {
-    alert("User");
     const userInfo = localStorage.getItem("userInformation");
     if (!user || !userInfo) {
-      alert("User2");
       logout();
       navigate("/");
     }
@@ -55,7 +53,6 @@ export const User = () => {
   }, []);
 
   useEffect(() => {
-    "alert filter";
     user && filterItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilter]);
