@@ -18,6 +18,8 @@ import { NotFound } from "./Pages/NotFound";
 import { UserHistory, dataLoader } from "./Pages/UserHistory";
 import { ErrorElement } from "./Pages/ErrorElement";
 import { AddItemForm } from "./Pages/AddItemForm";
+import { checkServer } from "./api/baseUrl/getBaseUrl";
+import { useState } from "react";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,8 +46,17 @@ const router = createBrowserRouter(
   )
 );
 function App() {
+  const [msg, setMsg] = useState("Loading");
+  const chk = async () => {
+    const isOkay = await checkServer();
+    setMsg(
+      isOkay ? "" : window.navigator.online ? "Server Error" : "No Internet"
+    );
+  };
+  chk();
   return (
     <div className="App">
+      <div>{msg}</div>
       <AuthProvider>
         <Toaster />
         <RouterProvider router={router} />
