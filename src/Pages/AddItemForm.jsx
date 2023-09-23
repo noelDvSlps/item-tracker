@@ -107,6 +107,7 @@ export const AddItemForm = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
           }}
           action=""
           id="add-item-form"
@@ -133,7 +134,7 @@ export const AddItemForm = () => {
             rows="10"
             value={itemDesc}
             onChange={(e) => setItemDesc(e.target.value)}
-            style={{ marginBottom: "10px" }}
+            style={{ marginBottom: "10px", width: "100%" }}
           ></textarea>
           <input
             style={{

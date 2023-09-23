@@ -46,7 +46,7 @@ const router = createBrowserRouter(
   )
 );
 function App() {
-  const [msg, setMsg] = useState("Loading");
+  const [msg, setMsg] = useState("Connecting to Server...");
   const chk = async () => {
     const isOkay = await checkServer();
     setMsg(

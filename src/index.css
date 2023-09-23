@@ -34,20 +34,17 @@ code {
   border: 1px solid;
   margin-left: auto;
   margin-right: auto;
-
-  width: 60vw;
   max-height: 700px;
-  overflow: hidden;
-  overflow-y: scroll;
+  overflow: scroll;
+  /* overflow-y: scroll; */
   text-align: right;
 }
 
-header nav {
-  display: flex;
-  gap: 16px;
-  justify-content: end;
-  margin: 0 auto;
-  align-items: center;
+header {
+  position: sticky;
+  top: 0;
+  background-color: rgb(76, 86, 49);
+  z-index: 10;
 }
 
 header nav h1 {
@@ -82,10 +79,8 @@ h1 {
 .pages {
   height: 100vh;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-auto-flow: column;
+  grid-auto-flow: row;
   padding: 50px;
-  /* background-image: url("background/tools.png"); */
   align-items: center;
   gap: 25px;
 }
@@ -186,11 +181,22 @@ input {
   .container {
     max-width: 720px;
   }
+  header nav {
+    display: flex;
+    gap: 16px;
+    justify-content: end;
+    margin: 0 auto;
+    align-items: center;
+  }
 }
 
 @media (min-width: 992px) {
   .container {
     max-width: 960px;
+  }
+  .pages {
+    /* grid-template-columns: 2fr 1fr; */
+    grid-auto-flow: column;
   }
 }
 

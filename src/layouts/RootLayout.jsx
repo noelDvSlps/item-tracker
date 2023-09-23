@@ -28,18 +28,20 @@ export const RootLayout = () => {
 
   return (
     <div className="root-layout">
-      <span
-        style={{
-          position: "absolute",
-          right: "50px",
-          color: "white",
-          fontSize: "1",
-        }}
-      >
-        {user &&
-          `Hi ${user.userType === "admin" ? "Admin" : ""} ${user.fullName}!`}
-      </span>
       <header style={{ padding: "15px 50px" }}>
+        <span
+          style={{
+            color: "white",
+            fontSize: "1",
+            zIndex: "20",
+            textAlign: "right",
+            width: "100%",
+            display: "block",
+          }}
+        >
+          {user &&
+            `Hi ${user.userType === "admin" ? "Admin" : ""} ${user.fullName}!`}
+        </span>
         <nav>
           <h1 style={{ color: "orange" }}>Item Tracker</h1>
           {user && (
