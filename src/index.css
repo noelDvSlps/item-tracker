@@ -41,6 +41,7 @@ code {
 }
 
 header {
+  padding: 15px 15px;
   position: sticky;
   top: 0;
   background-color: rgb(76, 86, 49);
@@ -197,6 +198,9 @@ input {
   .pages {
     /* grid-template-columns: 2fr 1fr; */
     grid-auto-flow: column;
+  }
+  header {
+    padding: 15px 50px;
   }
 }
 

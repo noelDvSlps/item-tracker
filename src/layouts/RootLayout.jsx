@@ -28,7 +28,7 @@ export const RootLayout = () => {
 
   return (
     <div className="root-layout">
-      <header style={{ padding: "15px 50px" }}>
+      <header>
         <span
           style={{
             color: "white",
